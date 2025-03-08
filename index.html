@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة الأكلات المصرية</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #ff6f61;
+            --primary-dark: #e65b50;
+            --secondary-color: #34495e;
+            --danger-color: #c0392b;
+            --light-bg: #ecf0f1;
+            --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --border-radius: 15px;
+            --transition: all 0.4s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--light-bg);
+            color: var(--secondary-color);
+            line-height: 1.8;
+            min-height: 100vh;
+            padding: 30px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #a93226;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+        }
+
+        .table-container {
+            margin-top: 30px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: right;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 700;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+        }
+
+        .no-items {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transform: translateX(-120%);
+            transition: transform 0.4s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .print-summary {
+            display: none; /* مخفي في الواجهة العادية */
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+            .table-container {
+                box-shadow: none;
+                padding: 0;
+                margin-top: 20mm;
+            }
+            table {
+                border: 1px solid #ddd;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 10px;
+            }
+            th {
+                background: var(--primary-color);
+                color: white;
+            }
+            tr:nth-child(even) {
+                background: #f9f9f9;
+            }
+            @page {
+                margin: 20mm;
+            }
+            .print-header {
+                position: running(header);
+                text-align: center;
+                font-size: 14px;
+                color: var(--secondary-color);
+                border-bottom: 2px solid var(--primary-color);
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+            .print-summary {
+                display: block;
+                text-align: right;
+                font-size: 12px;
+                color: var(--secondary-color);
+                margin-top: 10px;
+                padding: 10px;
+                border-top: 1px solid #ddd;
+            }
+            thead {
+                display: table-header-group;
+            }
+            tfoot {
+                display: table-footer-group;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="print-header">
+        <div>قائمة الأكلات المصرية</div>
+        <div>راندة أنس</div>
+        <div id="print-date"></div>
+    </div>
+    <div class="container">
+        <h1>قائمة الأكلات المصرية</h1>
+        <div class="subtitle">راندة أنس</div>
+        <div class="card no-print">
+            <div class="form-group">
+                <label for="food-name">اسم الأكلة:</label>
+                <input type="text" id="food-name" placeholder="أدخل اسم الأكلة" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="food-price">السعر (جنيه):</label>
+                <input type="number" id="food-price" placeholder="أدخل السعر">
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="addFood()">
+                    <i class="fas fa-plus"></i> إضافة
+                </button>
+                <button class="btn btn-danger" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i> مسح الكل
+                </button>
+            </div>
+        </div>
+        <div id="table-container" class="table-container"></div>
+        <div id="print-summary" class="print-summary"></div>
+        <div class="button-group no-print">
+            <button class="btn btn-primary" onclick="generatePDF()">
+                <i class="fas fa-file-pdf"></i> تحميل PDF
+            </button>
+            <button class="btn btn-success" onclick="printList()">
+                <i class="fas fa-print"></i> طباعة
+            </button>
+        </div>
+    </div>
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message"></span>
+    </div>
+
+    <script>
+        let foods = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            document.getElementById('food-name').addEventListener('keypress', e => {
+                if (e.key === 'Enter') document.getElementById('food-price').focus();
+            });
+            document.getElementById('food-price').addEventListener('keypress', e => {
+                if (e.key === 'Enter') addFood();
+            });
+        });
+
+        function saveToLocalStorage() {
+            localStorage.setItem('egyptianFoods', JSON.stringify(foods));
+        }
+
+        function loadFromLocalStorage() {
+            const storedFoods = localStorage.getItem('egyptianFoods');
+            if (storedFoods) {
+                foods = JSON.parse(storedFoods);
+                updateTable();
+            } else {
+                updateTable();
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageSpan = document.getElementById('notification-message');
+            notification.style.backgroundColor = type === 'success' ? '#27ae60' : '#c0392b';
+            notification.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            messageSpan.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+
+        function addFood() {
+            const foodName = document.getElementById('food-name').value.trim();
+            const foodPrice = document.getElementById('food-price').value.trim();
+
+            if (!foodName) {
+                showNotification('أدخل اسم الأكلة', 'error');
+                return;
+            }
+            if (!foodPrice || isNaN(foodPrice) || parseFloat(foodPrice) <= 0) {
+                showNotification('أدخل سعرًا صحيحًا', 'error');
+                return;
+            }
+
+            foods.push({ id: Date.now(), name: foodName, price: parseFloat(foodPrice) });
+            saveToLocalStorage();
+            updateTable();
+            clearForm();
+            showNotification('تمت الإضافة بنجاح');
+        }
+
+        function updateTable() {
+            const tableContainer = document.getElementById('table-container');
+            if (foods.length === 0) {
+                tableContainer.innerHTML = `
+                    <div class="no-items">
+                        <p>لا توجد أكلات حاليًا</p>
+                    </div>`;
+                return;
+            }
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم الأكلة</th>
+                            <th>السعر</th>
+                            <th class="no-print">حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            foods.forEach(food => {
+                tableHTML += `
+                    <tr>
+                        <td>${food.name}</td>
+                        <td>${food.price.toFixed(2)}</td>
+                        <td class="no-print">
+                            <button class="delete-btn" onclick="deleteFood(${food.id})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+            tableHTML += `</tbody></table>`;
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        function deleteFood(id) {
+            if (confirm('هل تريد حذف هذه الأكلة؟')) {
+                foods = foods.filter(food => food.id !== id);
+                saveToLocalStorage();
+                updateTable();
+                showNotification('تم الحذف بنجاح');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('food-name').value = '';
+            document.getElementById('food-price').value = '';
+            document.getElementById('food-name').focus();
+        }
+
+        function clearAllData() {
+            if (confirm('هل تريد مسح كل البيانات؟')) {
+                foods = [];
+                localStorage.removeItem('egyptianFoods');
+                updateTable();
+                showNotification('تم مسح كل البيانات');
+            }
+        }
+
+        function generatePDF() {
+            if (foods.length === 0) {
+                showNotification('لا توجد بيانات للتحميل', 'error');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const currentDate = new Date().toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'numeric',
+                year: '2-digit',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+            doc.setFontSize(12);
+            doc.text(currentDate, 200, 10, { align: 'right' });
+
+            doc.setFontSize(16);
+            doc.text('قائمة الأكلات المصرية', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('راندة أنس', 105, 30, { align: 'center' });
+
+            const tableData = [['السعر', 'اسم الأكلة']];
+            foods.forEach(food => tableData.push([food.price.toFixed(2), food.name]));
+
+            doc.autoTable({
+                head: [tableData[0]],
+                body: tableData.slice(1),
+                startY: 40,
+                styles: { halign: 'right', fontSize: 12 },
+                headStyles: { fillColor: [255, 111, 97], textColor: [255, 255, 255] },
+                margin: { right: 10, left: 10 }
+            });
+
+            const totalItems = foods.length;
+            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
+            const minPrice = Math.min(...foods.map(food => food.price));
+            const maxPrice = Math.max(...foods.map(food => food.price));
+
+            const finalY = doc.lastAutoTable.finalY || 40;
+            doc.setFontSize(12);
+            doc.text(`إجمالي الأكلات: ${totalItems}`, 200, finalY + 10, { align: 'right' });
+            doc.text(`إجمالي الأسعار: ${totalPrice.toFixed(2)} جنيه`, 200, finalY + 20, { align: 'right' });
+            doc.text(`السعر الأدنى: ${minPrice.toFixed(2)} جنيه`, 200, finalY + 30, { align: 'right' });
+            doc.text(`السعر الأعلى: ${maxPrice.toFixed(2)} جنيه`, 200, finalY + 40, { align: 'right' });
+
+            doc.save('egyptian_foods.pdf');
+            showNotification('تم تحميل PDF بنجاح');
+        }
+
+        function printList() {
+            if (foods.length === 0) {
+                showNotification('لا توجد بيانات للطباعة', 'error');
+                return;
+            }
+
+            const currentDate = new Date().toLocaleString('en-US', {
+                day: 'numeric',
+                month: 'numeric',
+                year: '2-digit',
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true
+            });
+            document.getElementById('print-date').textContent = currentDate;
+
+            // تحديث قسم الإجماليات
+            const totalItems = foods.length;
+            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
+            const minPrice = Math.min(...foods.map(food => food.price));
+            const maxPrice = Math.max(...foods.map(food => food.price));
+
+            const summaryContainer = document.getElementById('print-summary');
+            summaryContainer.innerHTML = `
+                <div>إجمالي الأكلات: ${totalItems}</div>
+                <div>إجمالي الأسعار: ${totalPrice.toFixed(2)} جنيه</div>
+                <div>السعر الأدنى: ${minPrice.toFixed(2)} جنيه</div>
+                <div>السعر الأعلى: ${maxPrice.toFixed(2)} جنيه</div>
+            `;
+
+            window.print();
+            showNotification('جاري الطباعة');
+        }
+    </script>
+</body>
+</html>
