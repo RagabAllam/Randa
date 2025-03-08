@@ -2,7 +2,7 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>قائمة الأكلات المصرية</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
@@ -33,15 +33,16 @@
             color: var(--secondary-color);
             line-height: 1.8;
             min-height: 100vh;
-            padding: 30px;
+            padding: 10px;
             direction: rtl;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
             background: white;
-            padding: 30px;
+            padding: 15px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
         }
@@ -50,42 +51,42 @@
             color: var(--primary-dark);
             text-align: center;
             margin-bottom: 10px;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
         }
 
         .subtitle {
             text-align: center;
             color: var(--secondary-color);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            margin-bottom: 15px;
         }
 
         .card {
             background: var(--light-bg);
             border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
             box-shadow: var(--box-shadow);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         label {
             font-weight: 700;
             color: var(--secondary-color);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             display: block;
         }
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
             transition: var(--transition);
         }
 
@@ -96,22 +97,25 @@
 
         .button-group {
             display: flex;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 10px 15px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
+            flex: 1;
+            min-width: 100px;
         }
 
         .btn-primary {
@@ -142,11 +146,11 @@
         }
 
         .table-container {
-            margin-top: 30px;
+            margin-top: 20px;
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 15px;
+            padding: 10px;
         }
 
         table {
@@ -155,8 +159,9 @@
         }
 
         th, td {
-            padding: 12px;
+            padding: 10px;
             text-align: right;
+            font-size: 14px;
         }
 
         th {
@@ -178,22 +183,22 @@
 
         .no-items {
             text-align: center;
-            padding: 30px;
+            padding: 20px;
             color: #7f8c8d;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .notification {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            border-radius: 8px;
             color: white;
             box-shadow: var(--box-shadow);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
             z-index: 1000;
             transform: translateX(-120%);
             transition: transform 0.4s ease;
@@ -204,7 +209,33 @@
         }
 
         .print-summary {
-            display: none; /* مخفي في الواجهة العادية */
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            input {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
         }
 
         @media print {
@@ -224,14 +255,14 @@
             .table-container {
                 box-shadow: none;
                 padding: 0;
-                margin-top: 20mm;
+                margin-top: 15mm;
             }
             table {
                 border: 1px solid #ddd;
             }
             th, td {
                 border: 1px solid #ddd;
-                padding: 10px;
+                padding: 8px;
             }
             th {
                 background: var(--primary-color);
@@ -241,12 +272,12 @@
                 background: #f9f9f9;
             }
             @page {
-                margin: 20mm;
+                margin: 15mm;
             }
             .print-header {
                 position: running(header);
                 text-align: center;
-                font-size: 14px;
+                font-size: 12px;
                 color: var(--secondary-color);
                 border-bottom: 2px solid var(--primary-color);
                 padding-bottom: 5px;
@@ -499,7 +530,6 @@
             });
             document.getElementById('print-date').textContent = currentDate;
 
-            // تحديث قسم الإجماليات
             const totalItems = foods.length;
             const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
             const minPrice = Math.min(...foods.map(food => food.price));
@@ -513,8 +543,15 @@
                 <div>السعر الأعلى: ${maxPrice.toFixed(2)} جنيه</div>
             `;
 
-            window.print();
-            showNotification('جاري الطباعة');
+            // الطباعة على التطبيق
+            if (window.cordova && cordova.plugins.printer) {
+                cordova.plugins.printer.print(document.documentElement.outerHTML, { duplex: 'none' }, function(res) {
+                    showNotification('تم إرسال الطباعة');
+                });
+            } else {
+                window.print();
+                showNotification('جاري الطباعة');
+            }
         }
     </script>
 </body>
