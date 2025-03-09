@@ -38,17 +38,25 @@
         }
 
         .container {
-            max-width: 1000px;
-            margin: 40px auto;
+            max-width: 100%;
+            padding: 20px;
+            margin: 0 auto;
             background-color: white;
-            padding: 30px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
         }
 
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1000px;
+                margin: 20px auto;
+                padding: 30px;
+            }
+        }
+
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             position: relative;
         }
 
@@ -64,9 +72,15 @@
 
         h1 {
             color: var(--primary-color);
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin: 0;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
         }
 
         .subtitle {
@@ -79,7 +93,7 @@
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
             transition: var(--transition);
         }
@@ -87,41 +101,67 @@
         .card-header {
             background-color: var(--primary-color);
             color: white;
-            padding: 15px 20px;
-            font-size: 1.2rem;
+            padding: 12px 15px;
+            font-size: 1.1rem;
             font-weight: bold;
         }
 
         .card-body {
-            padding: 20px;
+            padding: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .card-header {
+                padding: 15px 20px;
+                font-size: 1.2rem;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
         }
 
         .form-row {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                flex-direction: row;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
         }
 
         .form-group {
             flex: 1;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             color: #555;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border: 1px solid var(--gray-medium);
             border-radius: var(--border-radius);
             font-size: 16px;
             font-family: 'Cairo', sans-serif;
             transition: var(--transition);
+        }
+
+        @media (min-width: 768px) {
+            input {
+                padding: 12px 15px;
+            }
         }
 
         input:focus {
@@ -133,26 +173,38 @@
         .buttons {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 12px 20px;
+            padding: 10px 16px;
             border: none;
             border-radius: var(--border-radius);
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        @media (min-width: 768px) {
+            button {
+                padding: 12px 20px;
+                font-size: 16px;
+                flex: none;
+                min-width: auto;
+            }
         }
 
         button i {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .btn-primary {
@@ -188,12 +240,19 @@
         .btn-danger {
             background-color: var(--danger-color);
             color: white;
-            padding: 8px 12px;
+            padding: 6px 10px;
             font-size: 14px;
+            min-width: auto;
         }
 
         .btn-danger:hover {
             background-color: var(--danger-dark);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 15px;
         }
 
         table {
@@ -205,14 +264,21 @@
 
         th, td {
             border: 1px solid var(--gray-medium);
-            padding: 15px;
+            padding: 10px;
             text-align: right;
+        }
+
+        @media (min-width: 768px) {
+            th, td {
+                padding: 15px;
+            }
         }
 
         th {
             background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
             color: white;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         tbody tr {
@@ -240,27 +306,50 @@
         .no-items {
             text-align: center;
             color: #999;
-            padding: 30px;
-            font-size: 1.1rem;
+            padding: 20px;
+            font-size: 1rem;
             background-color: var(--gray-light);
             border-radius: var(--border-radius);
-            margin: 20px 0;
+            margin: 15px 0;
+        }
+
+        @media (min-width: 768px) {
+            .no-items {
+                padding: 30px;
+                font-size: 1.1rem;
+            }
         }
 
         .action-buttons {
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        @media (min-width: 768px) {
+            .action-buttons {
+                flex-direction: row;
+                gap: 20px;
+                margin-top: 40px;
+            }
         }
 
         .action-button {
-            flex: 1;
-            max-width: 250px;
-            padding: 15px;
-            font-size: 1.1rem;
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
             border-radius: var(--border-radius);
             text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .action-button {
+                flex: 1;
+                max-width: 250px;
+                padding: 15px;
+                font-size: 1.1rem;
+            }
         }
 
         #pdf-section {
@@ -271,28 +360,39 @@
         }
 
         .page-footer {
-            margin-top: 40px;
+            margin-top: 30px;
             text-align: center;
             color: #888;
             font-size: 0.9rem;
-            padding-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid var(--gray-medium);
         }
 
         .food-count {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 5px;
+            left: 5px;
             background-color: var(--primary-color);
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 768px) {
+            .food-count {
+                top: 10px;
+                left: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
         }
 
         @media print {
@@ -311,27 +411,6 @@
             }
             .no-print {
                 display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-
-            .container {
-                padding: 20px;
-                margin: 20px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .action-button {
-                max-width: 100%;
             }
         }
 
@@ -418,13 +497,13 @@
 
         <div id="print-section"></div>
         
-        <!-- Added separate section for PDF content -->
+        <!-- قسم محتوى PDF -->
         <div id="pdf-content">
-            <h2 style="text-align: center; color: #FF5722;">قائمة الأكلات</h2>
-            <p style="text-align: center;">راندة انس</p>
-            <p style="text-align: center;" id="pdf-date"></p>
+            <h2 style="text-align: center; color: #FF5722; margin-bottom: 10px;">قائمة الأكلات المصرية</h2>
+            <p style="text-align: center; margin-bottom: 5px;">راندة انس</p>
+            <p style="text-align: center; margin-bottom: 15px;" id="pdf-date"></p>
             <div id="pdf-table-container"></div>
-            <p style="text-align: center; margin-top: 30px; font-size: 14px; color: #888;">
+            <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #888;">
                 تم إنشاء هذه القائمة بواسطة راندة انس
             </p>
         </div>
@@ -499,16 +578,17 @@
             const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
 
             let tableHTML = `
-                <table id="food-table" class="animate-fade-in">
-                    <thead>
-                        <tr>
-                            <th width="5%">#</th>
-                            <th width="50%">اسم الأكلة</th>
-                            <th width="25%">السعر (جنيه)</th>
-                            <th width="20%" class="no-print">إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-responsive">
+                    <table id="food-table" class="animate-fade-in">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>اسم الأكلة</th>
+                                <th>السعر (جنيه)</th>
+                                <th class="no-print">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
 
             foods.forEach((food, index) => {
@@ -536,8 +616,9 @@
             `;
 
             tableHTML += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             `;
 
             tableContainer.innerHTML = tableHTML;
@@ -573,19 +654,19 @@
 
             // إنشاء محتوى للطباعة
             let printContent = `
-                <div style="padding: 20px; font-family: 'Cairo', Arial, sans-serif; direction: rtl;">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #FF5722; margin-bottom: 10px; font-size: 28px;">قائمة الأكلات المصرية</h1>
+                <div style="padding: 15px; font-family: 'Cairo', Arial, sans-serif; direction: rtl;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h1 style="color: #FF5722; margin-bottom: 10px; font-size: 24px;">قائمة الأكلات المصرية</h1>
                         <p style="margin-bottom: 5px; color: #666;">راندة انس</p>
-                        <p style="margin-bottom: 20px;">التاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
+                        <p style="margin-bottom: 15px;">التاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
                     </div>
 
-                    <table style="width: 100%; border-collapse: collapse; margin: 0 auto; margin-bottom: 30px;">
+                    <table style="width: 100%; border-collapse: collapse; margin: 0 auto; margin-bottom: 20px;">
                         <thead>
                             <tr>
-                                <th style="border: 1px solid #ddd; padding: 12px; background-color: #FF5722; color: white; text-align: right;">#</th>
-                                <th style="border: 1px solid #ddd; padding: 12px; background-color: #FF5722; color: white; text-align: right;">اسم الأكلة</th>
-                                <th style="border: 1px solid #ddd; padding: 12px; background-color: #FF5722; color: white; text-align: right;">السعر (جنيه)</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">#</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">اسم الأكلة</th>
+                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">السعر (جنيه)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -595,9 +676,9 @@
                 const bgColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9';
                 printContent += `
                     <tr style="background-color: ${bgColor};">
-                        <td style="border: 1px solid #ddd; padding: 12px;">${index + 1}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px;">${food.name}</td>
-                        <td style="border: 1px solid #ddd; padding: 12px;">${food.price.toFixed(2)}</td>
+                        <td style="border: 1px solid #ddd; padding: 10px;">${index + 1}</td>
+                        <td style="border: 1px solid #ddd; padding: 10px;">${food.name}</td>
+                        <td style="border: 1px solid #ddd; padding: 10px;">${food.price.toFixed(2)}</td>
                     </tr>
                 `;
             });
@@ -605,8 +686,8 @@
             // إضافة صف الإجمالي
             printContent += `
                 <tr style="background-color: #f2f2f2; font-weight: bold;">
-                    <td style="border: 1px solid #ddd; padding: 12px;" colspan="2">الإجمالي</td>
-                    <td style="border: 1px solid #ddd; padding: 12px;">${totalPrice.toFixed(2)}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;" colspan="2">الإجمالي</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">${totalPrice.toFixed(2)}</td>
                 </tr>
             `;
 
@@ -614,8 +695,8 @@
                         </tbody>
                     </table>
 
-                    <div style="margin-top: 50px; text-align: center; font-size: 14px; color: #888; border-top: 1px solid #ddd; padding-top: 15px;">
-                        تم إنشاء هذه القائمة بواسطة نظام إدارة المطاعم
+                    <div style="margin-top: 30px; text-align: center; font-size: 14px; color: #888; border-top: 1px solid #ddd; padding-top: 15px;">
+                        تم إنشاء هذه القائمة بواسطة راندة انس
                     </div>
                 </div>
             `;
@@ -626,18 +707,7 @@
             window.print();
         }
 
-        // دالة مساعدة لتحميل خط عربي في PDF
-        function loadArabicFont(callback) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap';
-            document.head.appendChild(link);
-            
-            // تأخير بسيط للتأكد من تحميل الخط
-            setTimeout(callback, 500);
-        }
-
-        // دالة لتوليد ملف PDF - تم تعديلها حسب المطلوب
+        // دالة لتوليد ملف PDF - محسنة للموبايل وللملفات الكبيرة
         function generatePDF() {
             if (foods.length === 0) {
                 alert('لا توجد أكلات لتحميلها. برجاء إضافة أكلات أولاً.');
@@ -648,14 +718,14 @@
             const pdfContent = document.getElementById('pdf-content');
             document.getElementById('pdf-date').textContent = 'التاريخ: ' + new Date().toLocaleDateString('ar-EG');
             
-            // إنشاء الجدول
+            // إنشاء الجدول مع تعديلات لتناسب الأجهزة المحمولة
             let tableHTML = `
                 <table id="pdf-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>اسم الأكلة</th>
-                            <th>السعر (جنيه)</th>
+                            <th style="width: 10%;">#</th>
+                            <th style="width: 60%;">اسم الأكلة</th>
+                            <th style="width: 30%;">السعر (جنيه)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -672,7 +742,14 @@
                 `;
             });
 
-            // أزلنا صف الإجمالي حسب المطلوب
+            // إضافة صف الإجمالي للـ PDF
+            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
+            tableHTML += `
+                <tr style="background-color: #f2f2f2; font-weight: bold;">
+                    <td colspan="2">الإجمالي</td>
+                    <td>${totalPrice.toFixed(2)}</td>
+                </tr>
+            `;
 
             tableHTML += `
                     </tbody>
@@ -686,7 +763,7 @@
             
             // استخدام html2canvas لتحويل المحتوى إلى صورة ثم إلى PDF
             html2canvas(pdfContent, {
-                scale: 2,
+                scale: 2, // زيادة الدقة للمظهر الأفضل
                 useCORS: true,
                 logging: false
             }).then(canvas => {
@@ -696,14 +773,45 @@
                 const imgData = canvas.toDataURL('image/png');
                 const { jsPDF } = window.jspdf;
                 
-                // إنشاء مستند PDF بحجم A4
-                const pdf = new jsPDF('p', 'mm', 'a4');
+                // تحسين الـ PDF ليناسب الأجهزة المحمولة
+                let orientation = 'p';
+                if (foods.length > 10) {
+                    orientation = 'p'; // الإبقاء على وضع portrait حتى مع القوائم الطويلة
+                }
+                
+                // إنشاء مستند PDF
+                const pdf = new jsPDF(orientation, 'mm', 'a4');
                 
                 // حساب الأبعاد مع الحفاظ على النسبة
-                const imgWidth = 210; // A4 width in mm
+                const pageWidth = orientation === 'p' ? 210 : 297;
+                const imgWidth = pageWidth - 20; // هوامش
                 const imgHeight = canvas.height * imgWidth / canvas.width;
                 
-                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                // إضافة الصورة إلى PDF مع الهوامش
+                pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+                
+                // إضافة ترقيم الصفحات للقوائم الطويلة
+                if (imgHeight > 270) {
+                    let heightLeft = imgHeight;
+                    let position = 10;
+                    let page = 1;
+                    
+                    // إضافة الصفحة الأولى
+                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= (297 - 20);
+                    
+                    // إضافة الصفحات الإضافية إذا كانت القائمة طويلة
+                    while (heightLeft > 0) {
+                        position = -277 * page; // حساب موضع الصفحة التالية
+                        page++;
+                        
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                        
+                        heightLeft -= (297 - 20);
+                    }
+                }
+                
                 pdf.save('قائمة_الأكلات.pdf');
             });
         }
