@@ -148,7 +148,7 @@
             color: #555;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 10px 15px;
             border: 1px solid var(--gray-medium);
@@ -159,12 +159,12 @@
         }
 
         @media (min-width: 768px) {
-            input {
+            input, select {
                 padding: 12px 15px;
             }
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.2);
@@ -247,6 +247,20 @@
 
         .btn-danger:hover {
             background-color: var(--danger-dark);
+        }
+
+        .btn-warning {
+            background-color: #FFC107;
+            color: #333;
+            padding: 6px 10px;
+            font-size: 14px;
+            min-width: auto;
+            margin-right: 5px;
+        }
+
+        .btn-warning:hover {
+            background-color: #FFA000;
+            color: #333;
         }
 
         .table-responsive {
@@ -444,6 +458,101 @@
         #pdf-content {
             display: none;
         }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gray-medium);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab:hover:not(.active) {
+            background-color: var(--gray-light);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        @media (min-width: 768px) {
+            .modal-content {
+                padding: 30px;
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-header {
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -451,46 +560,119 @@
         <header>
             <h1>قائمة الأكلات المصرية</h1>
             <p class="subtitle">راندة انس</p>
-            <div id="food-counter" class="food-count">0</div>
+            <div id="menu-counter" class="food-count">0</div>
         </header>
 
         <div class="no-print">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-plus-circle"></i> إضافة أكلة جديدة
-                </div>
-                <div class="card-body">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="food-name"><i class="fas fa-utensils"></i> اسم الأكلة:</label>
-                            <input type="text" id="food-name" placeholder="أدخل اسم الأكلة المصرية">
+            <div class="tabs">
+                <div class="tab active" onclick="openTab('tab-menu')">قائمتي</div>
+                <div class="tab" onclick="openTab('tab-categories')">إدارة الأصناف</div>
+            </div>
+
+            <!-- قسم قائمتي -->
+            <div id="tab-menu" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-plus-circle"></i> إضافة أكلة إلى القائمة
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="food-select"><i class="fas fa-list"></i> اختر الأكلة:</label>
+                                <select id="food-select">
+                                    <option value="">-- اختر أكلة --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="menu-price"><i class="fas fa-money-bill-wave"></i> السعر (جنيه):</label>
+                                <input type="number" id="menu-price" placeholder="أدخل السعر" min="0" step="0.01">
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="food-price"><i class="fas fa-money-bill-wave"></i> السعر (جنيه):</label>
-                            <input type="number" id="food-price" placeholder="أدخل السعر" min="0" step="0.01">
+                        <div class="buttons">
+                            <button class="btn-primary" onclick="addToMenu()">
+                                <i class="fas fa-plus"></i> إضافة إلى القائمة
+                            </button>
+                            <button class="btn-secondary" onclick="clearMenuForm()">
+                                <i class="fas fa-eraser"></i> مسح البيانات
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <div class="buttons">
-                        <button class="btn-primary" onclick="addFood()">
-                            <i class="fas fa-plus"></i> إضافة أكلة
-                        </button>
-                        <button class="btn-secondary" onclick="clearForm()">
-                            <i class="fas fa-eraser"></i> مسح البيانات
-                        </button>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i> قائمة الأكلات الحالية
+                    </div>
+                    <div class="card-body">
+                        <div id="menu-table-container">
+                            <p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أكلات في القائمة حالياً. برجاء إضافة أكلات.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-list"></i> قائمة الأكلات
+                <div class="action-buttons no-print">
+                    <button class="action-button btn-secondary" onclick="generatePDF()">
+                        <i class="fas fa-file-pdf"></i> تحميل كملف PDF
+                    </button>
+                    <button class="action-button btn-success" onclick="printTable()">
+                        <i class="fas fa-print"></i> طباعة القائمة
+                    </button>
+                </div>
             </div>
-            <div class="card-body">
-                <div id="table-container">
-                    <p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أكلات في القائمة حالياً. برجاء إضافة أكلات.</p>
+
+            <!-- قسم إدارة الأصناف -->
+            <div id="tab-categories" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-plus-circle"></i> إضافة صنف جديد
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="category-name"><i class="fas fa-tag"></i> الصنف:</label>
+                                <select id="category-name">
+                                    <option value="">-- اختر الصنف --</option>
+                                    <option value="أطباق رئيسية">أطباق رئيسية</option>
+                                    <option value="مقبلات">مقبلات</option>
+                                    <option value="حلويات">حلويات</option>
+                                    <option value="مشروبات">مشروبات</option>
+                                    <option value="أخرى">أخرى</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="food-name"><i class="fas fa-utensils"></i> اسم الأكلة:</label>
+                                <input type="text" id="food-name" placeholder="أدخل اسم الأكلة المصرية">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="food-price"><i class="fas fa-money-bill-wave"></i> السعر (جنيه):</label>
+                                <input type="number" id="food-price" placeholder="أدخل السعر" min="0" step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button class="btn-primary" onclick="addFood()">
+                                <i class="fas fa-plus"></i> إضافة صنف
+                            </button>
+                            <button class="btn-secondary" onclick="clearForm()">
+                                <i class="fas fa-eraser"></i> مسح البيانات
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-database"></i> قاعدة بيانات الأصناف
+                    </div>
+                    <div class="card-body">
+                        <div id="food-table-container">
+                            <p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أصناف في قاعدة البيانات. برجاء إضافة أصناف.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -508,13 +690,38 @@
             </p>
         </div>
 
-        <div class="action-buttons no-print">
-            <button class="action-button btn-secondary" onclick="generatePDF()">
-                <i class="fas fa-file-pdf"></i> تحميل كملف PDF
-            </button>
-            <button class="action-button btn-success" onclick="printTable()">
-                <i class="fas fa-print"></i> طباعة القائمة
-            </button>
+        <!-- مودال تعديل الصنف -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h3 class="modal-title">تعديل بيانات الصنف</h3>
+                </div>
+                <div class="form-group">
+                    <label for="edit-category"><i class="fas fa-tag"></i> الصنف:</label>
+                    <select id="edit-category">
+                        <option value="أطباق رئيسية">أطباق رئيسية</option>
+                        <option value="مقبلات">مقبلات</option>
+                        <option value="حلويات">حلويات</option>
+                        <option value="مشروبات">مشروبات</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-name"><i class="fas fa-utensils"></i> اسم الأكلة:</label>
+                    <input type="text" id="edit-name">
+                </div>
+                <div class="form-group">
+                    <label for="edit-price"><i class="fas fa-money-bill-wave"></i> السعر (جنيه):</label>
+                    <input type="number" id="edit-price" min="0" step="0.01">
+                </div>
+                <input type="hidden" id="edit-id">
+                <div class="buttons">
+                    <button class="btn-primary" onclick="saveEdit()">
+                        <i class="fas fa-save"></i> حفظ التغييرات
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="page-footer">
@@ -526,13 +733,72 @@
         // إعداد التاريخ الحالي
         document.getElementById('current-date').textContent = new Date().toLocaleDateString('ar-EG');
 
-        // مصفوفة لتخزين الأكلات
-        let foods = [];
+        // مصفوفات لتخزين البيانات
+        let foodCatalog = []; // قاعدة بيانات الأصناف
+        let menuItems = []; // قائمة الطعام الحالية
 
-        // دالة لإضافة أكلة جديدة
+        // دالة لفتح تبويب
+        function openTab(tabId) {
+            // إخفاء جميع المحتويات
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // إزالة التنشيط من جميع التبويبات
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // تنشيط التبويب والمحتوى المطلوب
+            document.getElementById(tabId).classList.add('active');
+            const activeTab = document.querySelector(`.tab[onclick="openTab('${tabId}')"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+        }
+
+        // دالة للتحميل عند بدء التشغيل
+        window.onload = function() {
+            loadData();
+            updateFoodDropdown();
+            updateFoodTable();
+            updateMenuTable();
+        };
+
+        // دالة لتحميل البيانات من التخزين المحلي
+        function loadData() {
+            const savedFoodCatalog = localStorage.getItem('foodCatalog');
+            if (savedFoodCatalog) {
+                foodCatalog = JSON.parse(savedFoodCatalog);
+            }
+
+            const savedMenuItems = localStorage.getItem('menuItems');
+            if (savedMenuItems) {
+                menuItems = JSON.parse(savedMenuItems);
+            }
+
+            // تحديث عداد القائمة
+            updateMenuCounter();
+        }
+
+        // دالة لحفظ البيانات في التخزين المحلي
+        function saveData() {
+            localStorage.setItem('foodCatalog', JSON.stringify(foodCatalog));
+            localStorage.setItem('menuItems', JSON.stringify(menuItems));
+        }
+
+        // دالة لإضافة صنف جديد
         function addFood() {
+            const category = document.getElementById('category-name').value.trim();
             const foodName = document.getElementById('food-name').value.trim();
             const foodPrice = parseFloat(document.getElementById('food-price').value.trim());
+
+            if (category === '') {
+                alert('برجاء اختيار صنف');
+                return;
+            }
 
             if (foodName === '' || isNaN(foodPrice)) {
                 alert('برجاء إدخال اسم الأكلة والسعر الصحيح');
@@ -544,275 +810,620 @@
                 return;
             }
 
-            // إضافة الأكلة إلى المصفوفة
-            foods.push({
+            // التحقق من عدم وجود نفس الاسم
+            const foodExists = foodCatalog.some(item => item.name.toLowerCase() === foodName.toLowerCase());
+            if (foodExists) {
+                alert('هذه الأكلة موجودة بالفعل. برجاء استخدام اسم مختلف أو تحديث السعر للأكلة الموجودة.');
+                return;
+            }
+
+            // إضافة الصنف إلى المصفوفة
+            foodCatalog.push({
+                id: Date.now(), // استخدام الطابع الزمني كمعرف فريد
+                category: category,
                 name: foodName,
                 price: foodPrice
             });
 
-            // تحديث الجدول
-            updateTable();
+            // حفظ البيانات
+            saveData();
 
-            // تحديث عداد الأكلات
-            updateFoodCounter();
+            // تحديث الجدول وقائمة الأكلات
+            updateFoodTable();
+            updateFoodDropdown();
 
             // مسح النموذج
             clearForm();
         }
 
-        // دالة لتحديث عداد الأكلات
-        function updateFoodCounter() {
-            document.getElementById('food-counter').textContent = foods.length;
+        // دالة لتحديث قائمة الأكلات المنسدلة
+        function updateFoodDropdown() {
+            const foodSelect = document.getElementById('food-select');
+            
+            // مسح القائمة الحالية
+            foodSelect.innerHTML = '<option value="">-- اختر أكلة --</option>';
+            
+            // ترتيب الأصناف حسب الصنف ثم الاسم
+            const sortedFoods = [...foodCatalog].sort((a, b) => {
+                if (a.category !== b.category) {
+                    return a.category.localeCompare(b.category);
+                }
+                return a.name.localeCompare(b.name);
+            });
+            
+            // إضافة الأصناف المتاحة
+            sortedFoods.forEach(food => {
+                const option = document.createElement('option');
+                option.value = food.id;
+                option.textContent = `${food.name} (${food.category})`;
+                option.dataset.price = food.price;
+                foodSelect.appendChild(option);
+            });
         }
 
-        // دالة لتحديث الجدول
-        function updateTable() {
-            const tableContainer = document.getElementById('table-container');
-
-            if (foods.length === 0) {
-                tableContainer.innerHTML = '<p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أكلات في القائمة حالياً. برجاء إضافة أكلات.</p>';
+        // دالة لتحديث جدول الأصناف
+        function updateFoodTable() {
+            const tableContainer = document.getElementById('food-table-container');
+            
+            if (foodCatalog.length === 0) {
+                tableContainer.innerHTML = '<p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أصناف في قاعدة البيانات. برجاء إضافة أصناف.</p>';
                 return;
             }
-
-            // حساب إجمالي السعر
-            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
-
+            
+// ترتيب الأصناف حسب الصنف ثم الاسم
+            const sortedFoods = [...foodCatalog].sort((a, b) => {
+                if (a.category !== b.category) {
+                    return a.category.localeCompare(b.category);
+                }
+                return a.name.localeCompare(b.name);
+            });
+            
+            // إنشاء الجدول
             let tableHTML = `
                 <div class="table-responsive">
-                    <table id="food-table" class="animate-fade-in">
+                    <table>
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>الصنف</th>
                                 <th>اسم الأكلة</th>
                                 <th>السعر (جنيه)</th>
-                                <th class="no-print">إجراءات</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
             `;
-
-            foods.forEach((food, index) => {
+            
+            sortedFoods.forEach(food => {
                 tableHTML += `
                     <tr>
-                        <td>${index + 1}</td>
+                        <td><span class="category-tag">${food.category}</span></td>
                         <td>${food.name}</td>
                         <td>${food.price.toFixed(2)}</td>
-                        <td class="no-print">
-                            <button class="btn-danger" onclick="deleteFood(${index})">
-                                <i class="fas fa-trash-alt"></i> حذف
+                        <td>
+                            <button class="btn-warning" onclick="editFood(${food.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger" onclick="removeFood(${food.id})">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>
                 `;
             });
-
-            // إضافة صف الإجمالي
-            tableHTML += `
-                <tr class="total-row">
-                    <td colspan="2">الإجمالي</td>
-                    <td>${totalPrice.toFixed(2)}</td>
-                    <td class="no-print"></td>
-                </tr>
-            `;
-
+            
             tableHTML += `
                         </tbody>
                     </table>
                 </div>
             `;
-
+            
             tableContainer.innerHTML = tableHTML;
         }
 
-        // دالة لحذف أكلة
-        function deleteFood(index) {
-            if (confirm('هل أنت متأكد من حذف هذه الأكلة؟')) {
-                foods.splice(index, 1);
-                updateTable();
-                updateFoodCounter();
-            }
-        }
-
-        // دالة لمسح النموذج
-        function clearForm() {
-            document.getElementById('food-name').value = '';
-            document.getElementById('food-price').value = '';
-            document.getElementById('food-name').focus();
-        }
-
-        // دالة للطباعة
-        function printTable() {
-            if (foods.length === 0) {
-                alert('لا توجد أكلات للطباعة. برجاء إضافة أكلات أولاً.');
+        // دالة لإضافة أكلة إلى القائمة
+        function addToMenu() {
+            const foodSelect = document.getElementById('food-select');
+            const foodId = foodSelect.value;
+            const menuPrice = parseFloat(document.getElementById('menu-price').value);
+            
+            if (foodId === '') {
+                alert('برجاء اختيار أكلة من القائمة');
                 return;
             }
+            
+            if (isNaN(menuPrice) || menuPrice <= 0) {
+                alert('برجاء إدخال سعر صحيح أكبر من صفر');
+                return;
+            }
+            
+            // البحث عن الأكلة في قاعدة البيانات
+            const selectedFood = foodCatalog.find(food => food.id == foodId);
+            if (!selectedFood) {
+                alert('لم يتم العثور على الأكلة المحددة');
+                return;
+            }
+            
+            // التحقق من عدم وجود الأكلة في القائمة بالفعل
+            const foodInMenu = menuItems.some(item => item.foodId == foodId);
+            if (foodInMenu) {
+                alert('هذه الأكلة موجودة بالفعل في القائمة. يمكنك تحديثها بدلاً من ذلك.');
+                return;
+            }
+            
+            // إضافة إلى القائمة
+            menuItems.push({
+                id: Date.now(),
+                foodId: foodId,
+                name: selectedFood.name,
+                category: selectedFood.category,
+                price: menuPrice
+            });
+            
+            // حفظ البيانات
+            saveData();
+            
+            // تحديث جدول القائمة
+            updateMenuTable();
+            
+            // تحديث عداد القائمة
+            updateMenuCounter();
+            
+            // مسح نموذج القائمة
+            clearMenuForm();
+        }
 
-            const printSection = document.getElementById('print-section');
-
-            // حساب الإجماليات
-            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
-
-            // إنشاء محتوى للطباعة
-            let printContent = `
-                <div style="padding: 15px; font-family: 'Cairo', Arial, sans-serif; direction: rtl;">
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <h1 style="color: #FF5722; margin-bottom: 10px; font-size: 24px;">قائمة الأكلات المصرية</h1>
-                        <p style="margin-bottom: 5px; color: #666;">راندة انس</p>
-                        <p style="margin-bottom: 15px;">التاريخ: ${new Date().toLocaleDateString('ar-EG')}</p>
-                    </div>
-
-                    <table style="width: 100%; border-collapse: collapse; margin: 0 auto; margin-bottom: 20px;">
+        // دالة لتحديث جدول القائمة
+        function updateMenuTable() {
+            const tableContainer = document.getElementById('menu-table-container');
+            
+            if (menuItems.length === 0) {
+                tableContainer.innerHTML = '<p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أكلات في القائمة حالياً. برجاء إضافة أكلات.</p>';
+                return;
+            }
+            
+            // ترتيب العناصر حسب الصنف ثم الاسم
+            const sortedItems = [...menuItems].sort((a, b) => {
+                if (a.category !== b.category) {
+                    return a.category.localeCompare(b.category);
+                }
+                return a.name.localeCompare(b.name);
+            });
+            
+            // حساب الإجمالي
+            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
+            
+            // إنشاء الجدول
+            let tableHTML = `
+                <div class="table-responsive">
+                    <table>
                         <thead>
                             <tr>
-                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">#</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">اسم الأكلة</th>
-                                <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white; text-align: right;">السعر (جنيه)</th>
+                                <th>الصنف</th>
+                                <th>اسم الأكلة</th>
+                                <th>السعر (جنيه)</th>
+                                <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
             `;
-
-            foods.forEach((food, index) => {
-                const bgColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9';
-                printContent += `
-                    <tr style="background-color: ${bgColor};">
-                        <td style="border: 1px solid #ddd; padding: 10px;">${index + 1}</td>
-                        <td style="border: 1px solid #ddd; padding: 10px;">${food.name}</td>
-                        <td style="border: 1px solid #ddd; padding: 10px;">${food.price.toFixed(2)}</td>
+            
+            sortedItems.forEach(item => {
+                tableHTML += `
+                    <tr>
+                        <td><span class="category-tag">${item.category}</span></td>
+                        <td>${item.name}</td>
+                        <td>${item.price.toFixed(2)}</td>
+                        <td>
+                            <button class="btn-warning" onclick="editMenuItem(${item.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger" onclick="removeMenuItem(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 `;
             });
+            
+            // إضافة صف الإجمالي
+            tableHTML += `
+                    <tr class="total-row">
+                        <td colspan="2">إجمالي القائمة</td>
+                        <td>${totalPrice.toFixed(2)}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+            `;
+            
+            tableContainer.innerHTML = tableHTML;
+        }
 
+        // دالة لتحديث عداد القائمة
+        function updateMenuCounter() {
+            document.getElementById('menu-counter').textContent = menuItems.length;
+        }
+
+        // دالة لمسح نموذج الأصناف
+        function clearForm() {
+            document.getElementById('category-name').value = '';
+            document.getElementById('food-name').value = '';
+            document.getElementById('food-price').value = '';
+        }
+
+        // دالة لمسح نموذج القائمة
+        function clearMenuForm() {
+            document.getElementById('food-select').value = '';
+            document.getElementById('menu-price').value = '';
+        }
+
+        // دالة لحذف صنف
+        function removeFood(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا الصنف؟')) {
+                return;
+            }
+            
+            // حذف الصنف من قاعدة البيانات
+            foodCatalog = foodCatalog.filter(food => food.id != id);
+            
+            // حذف أي استخدام لهذا الصنف في القائمة
+            menuItems = menuItems.filter(item => item.foodId != id);
+            
+            // حفظ البيانات
+            saveData();
+            
+            // تحديث الجداول
+            updateFoodTable();
+            updateFoodDropdown();
+            updateMenuTable();
+            
+            // تحديث العداد
+            updateMenuCounter();
+        }
+
+        // دالة لحذف عنصر من القائمة
+        function removeMenuItem(id) {
+            if (!confirm('هل أنت متأكد من حذف هذا العنصر من القائمة؟')) {
+                return;
+            }
+            
+            // حذف العنصر من القائمة
+            menuItems = menuItems.filter(item => item.id != id);
+            
+            // حفظ البيانات
+            saveData();
+            
+            // تحديث الجدول
+            updateMenuTable();
+            
+            // تحديث العداد
+            updateMenuCounter();
+        }
+
+        // دالة لتعديل صنف
+        function editFood(id) {
+            const food = foodCatalog.find(item => item.id == id);
+            if (!food) {
+                return;
+            }
+            
+            // ملء نموذج التعديل
+            document.getElementById('edit-category').value = food.category;
+            document.getElementById('edit-name').value = food.name;
+            document.getElementById('edit-price').value = food.price;
+            document.getElementById('edit-id').value = food.id;
+            
+            // عرض المودال
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        // دالة لحفظ التعديلات
+        function saveEdit() {
+            const id = document.getElementById('edit-id').value;
+            const category = document.getElementById('edit-category').value.trim();
+            const name = document.getElementById('edit-name').value.trim();
+            const price = parseFloat(document.getElementById('edit-price').value);
+            
+            if (category === '' || name === '' || isNaN(price) || price <= 0) {
+                alert('برجاء إدخال جميع البيانات بشكل صحيح');
+                return;
+            }
+            
+            // التحقق من عدم وجود نفس الاسم (مع استثناء الصنف نفسه)
+            const nameExists = foodCatalog.some(item => 
+                item.id != id && item.name.toLowerCase() === name.toLowerCase());
+            
+            if (nameExists) {
+                alert('هذا الاسم موجود بالفعل. برجاء استخدام اسم مختلف.');
+                return;
+            }
+            
+            // تحديث الصنف
+            const foodIndex = foodCatalog.findIndex(item => item.id == id);
+            if (foodIndex !== -1) {
+                const oldFood = foodCatalog[foodIndex];
+                
+                // تحديث الصنف
+                foodCatalog[foodIndex] = {
+                    ...oldFood,
+                    category: category,
+                    name: name,
+                    price: price
+                };
+                
+                // تحديث أي استخدامات في القائمة (فقط الاسم والصنف)
+                menuItems.forEach(item => {
+                    if (item.foodId == id) {
+                        item.name = name;
+                        item.category = category;
+                    }
+                });
+                
+                // حفظ البيانات
+                saveData();
+                
+                // تحديث الجداول
+                updateFoodTable();
+                updateFoodDropdown();
+                updateMenuTable();
+                
+                // إغلاق المودال
+                closeModal();
+            }
+        }
+
+        // دالة لتعديل عنصر في القائمة
+        function editMenuItem(id) {
+            const menuItem = menuItems.find(item => item.id == id);
+            if (!menuItem) {
+                return;
+            }
+            
+            // استخدام نافذة الإدخال للحصول على السعر الجديد
+            const newPrice = prompt(`أدخل السعر الجديد للأكلة "${menuItem.name}":`, menuItem.price);
+            
+            // التحقق من صحة السعر
+            if (newPrice === null) {
+                return; // تم الإلغاء
+            }
+            
+            const parsedPrice = parseFloat(newPrice);
+            if (isNaN(parsedPrice) || parsedPrice <= 0) {
+                alert('برجاء إدخال سعر صحيح أكبر من صفر');
+                return;
+            }
+            
+            // تحديث السعر
+            menuItem.price = parsedPrice;
+            
+            // حفظ البيانات
+            saveData();
+            
+            // تحديث جدول القائمة
+            updateMenuTable();
+        }
+
+        // دالة لإغلاق المودال
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // إغلاق المودال عند النقر خارجه
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // دالة لطباعة القائمة
+        function printTable() {
+            if (menuItems.length === 0) {
+                alert('لا توجد أكلات في القائمة للطباعة');
+                return;
+            }
+            
+            // ترتيب العناصر حسب الصنف ثم الاسم
+            const sortedItems = [...menuItems].sort((a, b) => {
+                if (a.category !== b.category) {
+                    return a.category.localeCompare(b.category);
+                }
+                return a.name.localeCompare(b.name);
+            });
+            
+            // إنشاء جدول القائمة للطباعة
+            let printContent = `
+                <div style="direction: rtl; font-family: 'Cairo', sans-serif; padding: 20px;">
+                    <h2 style="text-align: center; color: #FF5722; margin-bottom: 10px;">قائمة الأكلات المصرية</h2>
+                    <p style="text-align: center; margin-bottom: 15px;">راندة انس - ${new Date().toLocaleDateString('ar-EG')}</p>
+                    
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white;">الصنف</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white;">اسم الأكلة</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; background-color: #FF5722; color: white;">السعر (جنيه)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            // تنظيم العناصر حسب الصنف
+            const categorizedItems = {};
+            
+            sortedItems.forEach(item => {
+                if (!categorizedItems[item.category]) {
+                    categorizedItems[item.category] = [];
+                }
+                categorizedItems[item.category].push(item);
+            });
+            
+            // إضافة العناصر حسب الصنف
+            Object.keys(categorizedItems).sort().forEach(category => {
+                // إضافة صف العنوان للصنف
+                printContent += `
+                    <tr>
+                        <td colspan="3" style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5; font-weight: bold; text-align: right;">
+                            ${category}
+                        </td>
+                    </tr>
+                `;
+                
+                // إضافة العناصر
+                categorizedItems[category].forEach(item => {
+                    printContent += `
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px;"></td>
+                            <td style="border: 1px solid #ddd; padding: 10px;">${item.name}</td>
+                            <td style="border: 1px solid #ddd; padding: 10px;">${item.price.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            });
+            
+            // حساب الإجمالي
+            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
+            
             // إضافة صف الإجمالي
             printContent += `
-                <tr style="background-color: #f2f2f2; font-weight: bold;">
-                    <td style="border: 1px solid #ddd; padding: 10px;" colspan="2">الإجمالي</td>
-                    <td style="border: 1px solid #ddd; padding: 10px;">${totalPrice.toFixed(2)}</td>
-                </tr>
-            `;
-
-            printContent += `
-                        </tbody>
-                    </table>
-
-                    <div style="margin-top: 30px; text-align: center; font-size: 14px; color: #888; border-top: 1px solid #ddd; padding-top: 15px;">
-                        تم إنشاء هذه القائمة بواسطة راندة انس
+                                <tr>
+                                    <td colspan="2" style="border: 1px solid #ddd; padding: 10px; font-weight: bold; border-top: 2px solid #FF5722;">إجمالي القائمة</td>
+                                    <td style="border: 1px solid #ddd; padding: 10px; font-weight: bold; border-top: 2px solid #FF5722;">${totalPrice.toFixed(2)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                    
+                    <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #888;">
+                        تم إنشاء هذه القائمة بواسطة راندة انس
+                    </p>
                 </div>
             `;
-
+            
+            // إضافة المحتوى إلى قسم الطباعة
+            const printSection = document.getElementById('print-section');
             printSection.innerHTML = printContent;
-
-            // بدء الطباعة
+            
+            // طباعة
             window.print();
         }
 
-        // دالة لتوليد ملف PDF - محسنة للموبايل وللملفات الكبيرة
+        // دالة لإنشاء ملف PDF
         function generatePDF() {
-            if (foods.length === 0) {
-                alert('لا توجد أكلات لتحميلها. برجاء إضافة أكلات أولاً.');
+            if (menuItems.length === 0) {
+                alert('لا توجد أكلات في القائمة لإنشاء ملف PDF');
                 return;
             }
-
-            // تجهيز محتوى PDF
-            const pdfContent = document.getElementById('pdf-content');
-            document.getElementById('pdf-date').textContent = 'التاريخ: ' + new Date().toLocaleDateString('ar-EG');
             
-            // إنشاء الجدول مع تعديلات لتناسب الأجهزة المحمولة
-            let tableHTML = `
+            // تعيين التاريخ
+            document.getElementById('pdf-date').textContent = new Date().toLocaleDateString('ar-EG');
+            
+            // ترتيب العناصر حسب الصنف ثم الاسم
+            const sortedItems = [...menuItems].sort((a, b) => {
+                if (a.category !== b.category) {
+                    return a.category.localeCompare(b.category);
+                }
+                return a.name.localeCompare(b.name);
+            });
+            
+            // إنشاء جدول PDF
+            let pdfTable = `
                 <table id="pdf-table">
                     <thead>
                         <tr>
-                            <th style="width: 10%;">#</th>
-                            <th style="width: 60%;">اسم الأكلة</th>
-                            <th style="width: 30%;">السعر (جنيه)</th>
+                            <th>الصنف</th>
+                            <th>اسم الأكلة</th>
+                            <th>السعر (جنيه)</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
-
-            foods.forEach((food, index) => {
-                const bgColor = index % 2 === 0 ? '#ffffff' : '#f9f9f9';
-                tableHTML += `
-                    <tr style="background-color: ${bgColor};">
-                        <td>${index + 1}</td>
-                        <td>${food.name}</td>
-                        <td>${food.price.toFixed(2)}</td>
+            
+            // تنظيم العناصر حسب الصنف
+            const categorizedItems = {};
+            
+            sortedItems.forEach(item => {
+                if (!categorizedItems[item.category]) {
+                    categorizedItems[item.category] = [];
+                }
+                categorizedItems[item.category].push(item);
+            });
+            
+            // إضافة العناصر حسب الصنف
+            Object.keys(categorizedItems).sort().forEach(category => {
+                // إضافة صف العنوان للصنف
+                pdfTable += `
+                    <tr>
+                        <td colspan="3" style="background-color: #f5f5f5; font-weight: bold; text-align: right;">
+                            ${category}
+                        </td>
                     </tr>
                 `;
+                
+                // إضافة العناصر
+                categorizedItems[category].forEach(item => {
+                    pdfTable += `
+                        <tr>
+                            <td></td>
+                            <td>${item.name}</td>
+                            <td>${item.price.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
             });
-
-            // إضافة صف الإجمالي للـ PDF
-            const totalPrice = foods.reduce((sum, food) => sum + food.price, 0);
-            tableHTML += `
-                <tr style="background-color: #f2f2f2; font-weight: bold;">
-                    <td colspan="2">الإجمالي</td>
-                    <td>${totalPrice.toFixed(2)}</td>
-                </tr>
-            `;
-
-            tableHTML += `
-                    </tbody>
-                </table>
+            
+            // حساب الإجمالي
+            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
+            
+            // إضافة صف الإجمالي
+            pdfTable += `
+                    <tr>
+                        <td colspan="2" style="font-weight: bold; border-top: 2px solid #FF5722;">إجمالي القائمة</td>
+                        <td style="font-weight: bold; border-top: 2px solid #FF5722;">${totalPrice.toFixed(2)}</td>
+                    </tr>
+                </tbody>
+            </table>
             `;
             
-            document.getElementById('pdf-table-container').innerHTML = tableHTML;
+            // إضافة الجدول إلى محتوى PDF
+            document.getElementById('pdf-table-container').innerHTML = pdfTable;
             
-            // إظهار المحتوى مؤقتًا
+            // تهيئة jsPDF وإنشاء الملف
+            const { jsPDF } = window.jspdf;
+            
+            // استخدام HTML2Canvas لتحويل محتوى PDF إلى صورة
+            const pdfContent = document.getElementById('pdf-content');
             pdfContent.style.display = 'block';
             
-            // استخدام html2canvas لتحويل المحتوى إلى صورة ثم إلى PDF
             html2canvas(pdfContent, {
-                scale: 2, // زيادة الدقة للمظهر الأفضل
+                scale: 2,
                 useCORS: true,
                 logging: false
             }).then(canvas => {
-                // إخفاء المحتوى بعد الانتهاء
+                // إخفاء محتوى PDF بعد التحويل
                 pdfContent.style.display = 'none';
                 
+                // إنشاء PDF بالتوجيه الصحيح
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // أبعاد A4 بالملليمتر
+                const pageWidth = 210;
+                const pageHeight = 297;
+                
+                // تحويل Canvas إلى صورة
                 const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
                 
-                // تحسين الـ PDF ليناسب الأجهزة المحمولة
-                let orientation = 'p';
-                if (foods.length > 10) {
-                    orientation = 'p'; // الإبقاء على وضع portrait حتى مع القوائم الطويلة
-                }
-                
-                // إنشاء مستند PDF
-                const pdf = new jsPDF(orientation, 'mm', 'a4');
-                
-                // حساب الأبعاد مع الحفاظ على النسبة
-                const pageWidth = orientation === 'p' ? 210 : 297;
+                // نسبة العرض إلى الارتفاع للحفاظ على النسب
                 const imgWidth = pageWidth - 20; // هوامش
-                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 
-                // إضافة الصورة إلى PDF مع الهوامش
+                // إضافة الصورة إلى PDF
                 pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
                 
-                // إضافة ترقيم الصفحات للقوائم الطويلة
-                if (imgHeight > 270) {
-                    let heightLeft = imgHeight;
-                    let position = 10;
-                    let page = 1;
-                    
-                    // إضافة الصفحة الأولى
-                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    heightLeft -= (297 - 20);
-                    
-                    // إضافة الصفحات الإضافية إذا كانت القائمة طويلة
-                    while (heightLeft > 0) {
-                        position = -277 * page; // حساب موضع الصفحة التالية
-                        page++;
-                        
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                        
-                        heightLeft -= (297 - 20);
-                    }
-                }
-                
-                pdf.save('قائمة_الأكلات.pdf');
+                // حفظ الملف
+                pdf.save('قائمة_الأكلات_المصرية.pdf');
             });
         }
     </script>
