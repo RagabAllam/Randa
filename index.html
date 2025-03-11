@@ -115,7 +115,7 @@
                 padding: 15px 20px;
                 font-size: 1.2rem;
             }
-            
+
             .card-body {
                 padding: 20px;
             }
@@ -307,16 +307,6 @@
             background-color: rgba(255, 87, 34, 0.05);
         }
 
-        .total-row {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .total-row td {
-            border-top: 2px solid var(--primary-color);
-        }
-
         .no-items {
             text-align: center;
             color: #999;
@@ -437,24 +427,24 @@
         .animate-fade-in {
             animation: fadeIn 0.3s ease forwards;
         }
-        
+
         #pdf-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
-        
+
         #pdf-table th, #pdf-table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: right;
         }
-        
+
         #pdf-table th {
             background-color: #FF5722;
             color: white;
         }
-        
+
         #pdf-content {
             display: none;
         }
@@ -678,7 +668,7 @@
         </div>
 
         <div id="print-section"></div>
-        
+
         <!-- قسم محتوى PDF -->
         <div id="pdf-content">
             <h2 style="text-align: center; color: #FF5722; margin-bottom: 10px;">قائمة الأكلات المصرية</h2>
@@ -839,10 +829,10 @@
         // دالة لتحديث قائمة الأكلات المنسدلة
         function updateFoodDropdown() {
             const foodSelect = document.getElementById('food-select');
-            
+
             // مسح القائمة الحالية
             foodSelect.innerHTML = '<option value="">-- اختر أكلة --</option>';
-            
+
             // ترتيب الأصناف حسب الصنف ثم الاسم
             const sortedFoods = [...foodCatalog].sort((a, b) => {
                 if (a.category !== b.category) {
@@ -850,7 +840,7 @@
                 }
                 return a.name.localeCompare(b.name);
             });
-            
+
             // إضافة الأصناف المتاحة
             sortedFoods.forEach(food => {
                 const option = document.createElement('option');
@@ -864,20 +854,20 @@
         // دالة لتحديث جدول الأصناف
         function updateFoodTable() {
             const tableContainer = document.getElementById('food-table-container');
-            
+
             if (foodCatalog.length === 0) {
                 tableContainer.innerHTML = '<p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أصناف في قاعدة البيانات. برجاء إضافة أصناف.</p>';
                 return;
             }
-            
-// ترتيب الأصناف حسب الصنف ثم الاسم
+
+            // ترتيب الأصناف حسب الصنف ثم الاسم
             const sortedFoods = [...foodCatalog].sort((a, b) => {
                 if (a.category !== b.category) {
                     return a.category.localeCompare(b.category);
                 }
                 return a.name.localeCompare(b.name);
             });
-            
+
             // إنشاء الجدول
             let tableHTML = `
                 <div class="table-responsive">
@@ -892,7 +882,7 @@
                         </thead>
                         <tbody>
             `;
-            
+
             sortedFoods.forEach(food => {
                 tableHTML += `
                     <tr>
@@ -910,13 +900,13 @@
                     </tr>
                 `;
             });
-            
+
             tableHTML += `
                         </tbody>
                     </table>
                 </div>
             `;
-            
+
             tableContainer.innerHTML = tableHTML;
         }
 
@@ -925,31 +915,31 @@
             const foodSelect = document.getElementById('food-select');
             const foodId = foodSelect.value;
             const menuPrice = parseFloat(document.getElementById('menu-price').value);
-            
+
             if (foodId === '') {
                 alert('برجاء اختيار أكلة من القائمة');
                 return;
             }
-            
+
             if (isNaN(menuPrice) || menuPrice <= 0) {
                 alert('برجاء إدخال سعر صحيح أكبر من صفر');
                 return;
             }
-            
+
             // البحث عن الأكلة في قاعدة البيانات
             const selectedFood = foodCatalog.find(food => food.id == foodId);
             if (!selectedFood) {
                 alert('لم يتم العثور على الأكلة المحددة');
                 return;
             }
-            
+
             // التحقق من عدم وجود الأكلة في القائمة بالفعل
             const foodInMenu = menuItems.some(item => item.foodId == foodId);
             if (foodInMenu) {
                 alert('هذه الأكلة موجودة بالفعل في القائمة. يمكنك تحديثها بدلاً من ذلك.');
                 return;
             }
-            
+
             // إضافة إلى القائمة
             menuItems.push({
                 id: Date.now(),
@@ -958,16 +948,16 @@
                 category: selectedFood.category,
                 price: menuPrice
             });
-            
+
             // حفظ البيانات
             saveData();
-            
+
             // تحديث جدول القائمة
             updateMenuTable();
-            
+
             // تحديث عداد القائمة
             updateMenuCounter();
-            
+
             // مسح نموذج القائمة
             clearMenuForm();
         }
@@ -975,12 +965,12 @@
         // دالة لتحديث جدول القائمة
         function updateMenuTable() {
             const tableContainer = document.getElementById('menu-table-container');
-            
+
             if (menuItems.length === 0) {
                 tableContainer.innerHTML = '<p class="no-items"><i class="fas fa-info-circle"></i> لا توجد أكلات في القائمة حالياً. برجاء إضافة أكلات.</p>';
                 return;
             }
-            
+
             // ترتيب العناصر حسب الصنف ثم الاسم
             const sortedItems = [...menuItems].sort((a, b) => {
                 if (a.category !== b.category) {
@@ -988,10 +978,7 @@
                 }
                 return a.name.localeCompare(b.name);
             });
-            
-            // حساب الإجمالي
-            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
-            
+
             // إنشاء الجدول
             let tableHTML = `
                 <div class="table-responsive">
@@ -1006,7 +993,7 @@
                         </thead>
                         <tbody>
             `;
-            
+
             sortedItems.forEach(item => {
                 tableHTML += `
                     <tr>
@@ -1024,19 +1011,13 @@
                     </tr>
                 `;
             });
-            
-            // إضافة صف الإجمالي
+
             tableHTML += `
-                    <tr class="total-row">
-                        <td colspan="2">إجمالي القائمة</td>
-                        <td>${totalPrice.toFixed(2)}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
             `;
-            
+
             tableContainer.innerHTML = tableHTML;
         }
 
@@ -1063,21 +1044,21 @@
             if (!confirm('هل أنت متأكد من حذف هذا الصنف؟')) {
                 return;
             }
-            
+
             // حذف الصنف من قاعدة البيانات
             foodCatalog = foodCatalog.filter(food => food.id != id);
-            
+
             // حذف أي استخدام لهذا الصنف في القائمة
             menuItems = menuItems.filter(item => item.foodId != id);
-            
+
             // حفظ البيانات
             saveData();
-            
+
             // تحديث الجداول
             updateFoodTable();
             updateFoodDropdown();
             updateMenuTable();
-            
+
             // تحديث العداد
             updateMenuCounter();
         }
@@ -1087,16 +1068,16 @@
             if (!confirm('هل أنت متأكد من حذف هذا العنصر من القائمة؟')) {
                 return;
             }
-            
+
             // حذف العنصر من القائمة
             menuItems = menuItems.filter(item => item.id != id);
-            
+
             // حفظ البيانات
             saveData();
-            
+
             // تحديث الجدول
             updateMenuTable();
-            
+
             // تحديث العداد
             updateMenuCounter();
         }
@@ -1107,13 +1088,13 @@
             if (!food) {
                 return;
             }
-            
+
             // ملء نموذج التعديل
             document.getElementById('edit-category').value = food.category;
             document.getElementById('edit-name').value = food.name;
             document.getElementById('edit-price').value = food.price;
             document.getElementById('edit-id').value = food.id;
-            
+
             // عرض المودال
             document.getElementById('editModal').style.display = 'block';
         }
@@ -1124,26 +1105,26 @@
             const category = document.getElementById('edit-category').value.trim();
             const name = document.getElementById('edit-name').value.trim();
             const price = parseFloat(document.getElementById('edit-price').value);
-            
+
             if (category === '' || name === '' || isNaN(price) || price <= 0) {
                 alert('برجاء إدخال جميع البيانات بشكل صحيح');
                 return;
             }
-            
+
             // التحقق من عدم وجود نفس الاسم (مع استثناء الصنف نفسه)
-            const nameExists = foodCatalog.some(item => 
+            const nameExists = foodCatalog.some(item =>
                 item.id != id && item.name.toLowerCase() === name.toLowerCase());
-            
+
             if (nameExists) {
                 alert('هذا الاسم موجود بالفعل. برجاء استخدام اسم مختلف.');
                 return;
             }
-            
+
             // تحديث الصنف
             const foodIndex = foodCatalog.findIndex(item => item.id == id);
             if (foodIndex !== -1) {
                 const oldFood = foodCatalog[foodIndex];
-                
+
                 // تحديث الصنف
                 foodCatalog[foodIndex] = {
                     ...oldFood,
@@ -1151,7 +1132,7 @@
                     name: name,
                     price: price
                 };
-                
+
                 // تحديث أي استخدامات في القائمة (فقط الاسم والصنف)
                 menuItems.forEach(item => {
                     if (item.foodId == id) {
@@ -1159,15 +1140,15 @@
                         item.category = category;
                     }
                 });
-                
+
                 // حفظ البيانات
                 saveData();
-                
+
                 // تحديث الجداول
                 updateFoodTable();
                 updateFoodDropdown();
                 updateMenuTable();
-                
+
                 // إغلاق المودال
                 closeModal();
             }
@@ -1179,27 +1160,27 @@
             if (!menuItem) {
                 return;
             }
-            
+
             // استخدام نافذة الإدخال للحصول على السعر الجديد
             const newPrice = prompt(`أدخل السعر الجديد للأكلة "${menuItem.name}":`, menuItem.price);
-            
+
             // التحقق من صحة السعر
             if (newPrice === null) {
                 return; // تم الإلغاء
             }
-            
+
             const parsedPrice = parseFloat(newPrice);
             if (isNaN(parsedPrice) || parsedPrice <= 0) {
                 alert('برجاء إدخال سعر صحيح أكبر من صفر');
                 return;
             }
-            
+
             // تحديث السعر
             menuItem.price = parsedPrice;
-            
+
             // حفظ البيانات
             saveData();
-            
+
             // تحديث جدول القائمة
             updateMenuTable();
         }
@@ -1223,7 +1204,7 @@
                 alert('لا توجد أكلات في القائمة للطباعة');
                 return;
             }
-            
+
             // ترتيب العناصر حسب الصنف ثم الاسم
             const sortedItems = [...menuItems].sort((a, b) => {
                 if (a.category !== b.category) {
@@ -1231,13 +1212,13 @@
                 }
                 return a.name.localeCompare(b.name);
             });
-            
+
             // إنشاء جدول القائمة للطباعة
             let printContent = `
                 <div style="direction: rtl; font-family: 'Cairo', sans-serif; padding: 20px;">
                     <h2 style="text-align: center; color: #FF5722; margin-bottom: 10px;">قائمة الأكلات المصرية</h2>
                     <p style="text-align: center; margin-bottom: 15px;">راندة انس - ${new Date().toLocaleDateString('ar-EG')}</p>
-                    
+
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                             <thead>
@@ -1249,17 +1230,17 @@
                             </thead>
                             <tbody>
             `;
-            
+
             // تنظيم العناصر حسب الصنف
             const categorizedItems = {};
-            
+
             sortedItems.forEach(item => {
                 if (!categorizedItems[item.category]) {
                     categorizedItems[item.category] = [];
                 }
                 categorizedItems[item.category].push(item);
             });
-            
+
             // إضافة العناصر حسب الصنف
             Object.keys(categorizedItems).sort().forEach(category => {
                 // إضافة صف العنوان للصنف
@@ -1270,7 +1251,7 @@
                         </td>
                     </tr>
                 `;
-                
+
                 // إضافة العناصر
                 categorizedItems[category].forEach(item => {
                     printContent += `
@@ -1282,30 +1263,22 @@
                     `;
                 });
             });
-            
-            // حساب الإجمالي
-            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
-            
-            // إضافة صف الإجمالي
+
             printContent += `
-                                <tr>
-                                    <td colspan="2" style="border: 1px solid #ddd; padding: 10px; font-weight: bold; border-top: 2px solid #FF5722;">إجمالي القائمة</td>
-                                    <td style="border: 1px solid #ddd; padding: 10px; font-weight: bold; border-top: 2px solid #FF5722;">${totalPrice.toFixed(2)}</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <p style="text-align: center; margin-top: 20px; font-size: 14px; color: #888;">
                         تم إنشاء هذه القائمة بواسطة راندة انس
                     </p>
                 </div>
             `;
-            
+
             // إضافة المحتوى إلى قسم الطباعة
             const printSection = document.getElementById('print-section');
             printSection.innerHTML = printContent;
-            
+
             // طباعة
             window.print();
         }
@@ -1316,10 +1289,10 @@
                 alert('لا توجد أكلات في القائمة لإنشاء ملف PDF');
                 return;
             }
-            
+
             // تعيين التاريخ
             document.getElementById('pdf-date').textContent = new Date().toLocaleDateString('ar-EG');
-            
+
             // ترتيب العناصر حسب الصنف ثم الاسم
             const sortedItems = [...menuItems].sort((a, b) => {
                 if (a.category !== b.category) {
@@ -1327,7 +1300,7 @@
                 }
                 return a.name.localeCompare(b.name);
             });
-            
+
             // إنشاء جدول PDF
             let pdfTable = `
                 <table id="pdf-table">
@@ -1340,17 +1313,17 @@
                     </thead>
                     <tbody>
             `;
-            
+
             // تنظيم العناصر حسب الصنف
             const categorizedItems = {};
-            
+
             sortedItems.forEach(item => {
                 if (!categorizedItems[item.category]) {
                     categorizedItems[item.category] = [];
                 }
                 categorizedItems[item.category].push(item);
             });
-            
+
             // إضافة العناصر حسب الصنف
             Object.keys(categorizedItems).sort().forEach(category => {
                 // إضافة صف العنوان للصنف
@@ -1361,7 +1334,7 @@
                         </td>
                     </tr>
                 `;
-                
+
                 // إضافة العناصر
                 categorizedItems[category].forEach(item => {
                     pdfTable += `
@@ -1373,30 +1346,22 @@
                     `;
                 });
             });
-            
-            // حساب الإجمالي
-            const totalPrice = sortedItems.reduce((sum, item) => sum + item.price, 0);
-            
-            // إضافة صف الإجمالي
+
             pdfTable += `
-                    <tr>
-                        <td colspan="2" style="font-weight: bold; border-top: 2px solid #FF5722;">إجمالي القائمة</td>
-                        <td style="font-weight: bold; border-top: 2px solid #FF5722;">${totalPrice.toFixed(2)}</td>
-                    </tr>
                 </tbody>
             </table>
             `;
-            
+
             // إضافة الجدول إلى محتوى PDF
             document.getElementById('pdf-table-container').innerHTML = pdfTable;
-            
+
             // تهيئة jsPDF وإنشاء الملف
             const { jsPDF } = window.jspdf;
-            
+
             // استخدام HTML2Canvas لتحويل محتوى PDF إلى صورة
             const pdfContent = document.getElementById('pdf-content');
             pdfContent.style.display = 'block';
-            
+
             html2canvas(pdfContent, {
                 scale: 2,
                 useCORS: true,
@@ -1404,24 +1369,24 @@
             }).then(canvas => {
                 // إخفاء محتوى PDF بعد التحويل
                 pdfContent.style.display = 'none';
-                
+
                 // إنشاء PDF بالتوجيه الصحيح
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                
+
                 // أبعاد A4 بالملليمتر
                 const pageWidth = 210;
                 const pageHeight = 297;
-                
+
                 // تحويل Canvas إلى صورة
                 const imgData = canvas.toDataURL('image/png');
-                
+
                 // نسبة العرض إلى الارتفاع للحفاظ على النسب
                 const imgWidth = pageWidth - 20; // هوامش
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
+
                 // إضافة الصورة إلى PDF
                 pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-                
+
                 // حفظ الملف
                 pdf.save('قائمة_الأكلات_المصرية.pdf');
             });
